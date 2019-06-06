@@ -1,9 +1,9 @@
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
 const app = express();
-const port = 3002;
+const port = 3003;
 const dbconfig = {
-    url: 'itzel:<againstme>@cluster0-vutpm.mongodb.net/test?retryWrites=true&w=majority',
+    url: 'mongodb+srv://itzel:againstme@cluster0-vutpm.mongodb.net/test?retryWrites=true&w=majority',
     dbname:'academia',
     collections: {
         posts:'posts',    
@@ -32,5 +32,15 @@ app.get('/posts', (req,res)=>{
     console.log(posts);
     res.send(posts);
     })
+})
+
+app.post('/posts', (req, res)=>{
+    const db=mongoConnect.db('academia');
+    const post = req.body;
+   const collection= db.collection('posts')
+   return collection.insert(post).toArray((err,post)=>{
+       if(err) res.send(400)
+        res.send(post)
+   })
 })
   app.listen(port, console.log('web server listening on port '+port));
